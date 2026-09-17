@@ -53,6 +53,11 @@
 							<td><span class="badge bg-danger">HTML Injection</span></td>
 						</tr>
 						<tr>
+							<td><code>renderBadgeCallback</code> <span class="badge bg-success-subtle text-success-emphasis">v2.0.0</span></td>
+							<td>Whole badge markup</td>
+							<td><span class="badge bg-danger">HTML Injection</span></td>
+						</tr>
+						<tr>
 							<td><code>renderSelectedItemContentCallback</code></td>
 							<td>Selected items popover</td>
 							<td><span class="badge bg-danger">HTML Injection</span></td>
@@ -163,18 +168,13 @@
 							<td><span class="badge bg-success">Safe</span></td>
 						</tr>
 						<tr>
-							<td><code>selectCallback</code></td>
-							<td>Event handler</td>
+							<td><code>onSelect</code> / <code>onDeselect</code> / <code>onChange</code></td>
+							<td>Event handlers (receive a CustomEvent)</td>
 							<td><span class="badge bg-success">Safe</span></td>
 						</tr>
 						<tr>
-							<td><code>deselectCallback</code></td>
-							<td>Event handler</td>
-							<td><span class="badge bg-success">Safe</span></td>
-						</tr>
-						<tr>
-							<td><code>changeCallback</code></td>
-							<td>Event handler</td>
+							<td><code>beforeSelectCallback</code> / <code>beforeDeselectCallback</code></td>
+							<td>Selection interceptors</td>
 							<td><span class="badge bg-success">Safe</span></td>
 						</tr>
 						<tr>

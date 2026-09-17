@@ -7,6 +7,13 @@
 	descriptionText="Learn how to install and use @keenmate/web-multiselect in your project">
 
 	<div class="py-4">
+		<div class="alert alert-primary">
+			<strong>Now on v2.0.0.</strong> New: tree mode, add-new creation, an imperative open/search/scroll-to
+			API, container-responsive badge collapse and base-icon theming. Upgrading from v1?
+			The event-handler properties (<code>onSelect</code>/<code>onChange</code>) now receive a
+			<code>CustomEvent</code> — see the <a href="/api/migration">migration notes</a>.
+		</div>
+
 		<!-- Installation -->
 		<ShowcaseSection
 			titleText="Installation"
@@ -137,19 +144,19 @@ select.setSelected([1, 3]);`}
 			<div class="row g-4">
 				<div class="col-lg-6">
 					<CodeBlock
-						codeContent={`<!-- Svelte -->
+						codeContent={`<!-- Svelte 5 (runes) -->
 <script>
   import '@keenmate/web-multiselect';
-  
-  let selectElement;
-  let options = [
+
+  let selectElement = $state();
+  const options = [
     { id: 1, label: 'Option 1' },
     { id: 2, label: 'Option 2' }
   ];
-  
-  $: if (selectElement) {
-    selectElement.options = options;
-  }
+
+  $effect(() => {
+    if (selectElement) selectElement.options = options;
+  });
 </script>
 
 <web-multiselect
@@ -274,9 +281,9 @@ export class MyComponent {
 						<div class="card-body">
 							<h3 class="h5 card-title">🔧 API Reference</h3>
 							<p class="card-text">
-								Learn about all available properties, methods, and events.
+								Learn about all available properties, methods, events and callbacks.
 							</p>
-							<a href="/api/component" class="btn btn-primary">
+							<a href="/api/properties" class="btn btn-primary">
 								API Docs →
 							</a>
 						</div>
@@ -287,10 +294,10 @@ export class MyComponent {
 						<div class="card-body">
 							<h3 class="h5 card-title">🎨 Styling Guide</h3>
 							<p class="card-text">
-								Customize the appearance with 125+ CSS variables and semantic color scales (accent/neutral).
+								Customize the appearance with CSS variables, <code>--ms-rem</code> scaling and the base-icon contract.
 							</p>
-							<a href="/features/custom-styling" class="btn btn-primary">
-								Custom Styling →
+							<a href="/features/theming" class="btn btn-primary">
+								Theming →
 							</a>
 						</div>
 					</div>

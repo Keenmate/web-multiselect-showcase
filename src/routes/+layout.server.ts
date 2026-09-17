@@ -25,33 +25,38 @@ const config: PartialDocsConfig = {
 		main: [
 			{ label: 'Home', href: '/', icon: '🏠' },
 			{ label: 'Getting Started', href: '/getting-started', icon: '🚀' },
-			{ label: 'Security', href: '/api/security', icon: '🔒' },
 			{
 				label: 'Features',
 				href: '/features/basic',
 				icon: '✨',
 				children: [
 					{ label: 'Basic Usage', href: '/features/basic' },
-					{ label: 'Groups', href: '/features/groups' },
-					{ label: 'Flexible Data', href: '/features/flexible-data' },
-					{ label: 'Value Format', href: '/features/value-format' },
-					{ label: 'Form Integration', href: '/features/form-integration' },
-					{ label: 'Async Search', href: '/features/async-search' },
+					{ label: 'Data & API', href: '/features/data-api' },
+					{ label: 'Events & Callbacks', href: '/features/events-callbacks' },
+					{ label: 'Tree', href: '/features/tree' },
+					{ label: 'Custom Rendering', href: '/features/custom-rendering' },
+					{ label: 'Action Buttons', href: '/features/action-buttons' },
+					{ label: 'Tooltips', href: '/features/tooltips' },
+					{ label: 'Responsive & RTL', href: '/features/responsive' },
+					{ label: 'External Search', href: '/features/external-search' },
 					{ label: 'Virtual Scrolling', href: '/features/virtual-scrolling' },
-					{ label: 'Display Modes', href: '/features/display-modes' },
-					{ label: 'RTL Support', href: '/features/rtl' },
-					{ label: 'Advanced Features', href: '/features/advanced-features' },
-					{ label: 'Custom Styling', href: '/features/custom-styling' }
+					{ label: 'Positioning', href: '/features/positioning' },
+					{ label: 'Theming', href: '/features/theming' },
+					{ label: 'Logging', href: '/features/logging' }
 				]
 			},
 			{
 				label: 'API Reference',
-				href: '/api/component',
+				href: '/api/properties',
 				icon: '📚',
 				children: [
-					{ label: 'Component API', href: '/api/component' },
 					{ label: 'Properties', href: '/api/properties' },
-					{ label: 'Events', href: '/api/events' }
+					{ label: 'Events', href: '/api/events' },
+					{ label: 'Methods', href: '/api/methods' },
+					{ label: 'Callbacks', href: '/api/callbacks' },
+					{ label: 'CSS Variables', href: '/api/css-variables' },
+					{ label: 'Security', href: '/api/security' },
+					{ label: 'Migration v1 → v2', href: '/api/migration' }
 				]
 			}
 		]
