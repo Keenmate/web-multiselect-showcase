@@ -110,6 +110,7 @@
 		</p>
 
 		<DemoPlayground
+			code="RS01"
 			titleText="Mobile presentation"
 			subtitleText="Floating panel on desktop, fullscreen sheet on touch — or force either."
 			baseAttrs={mobileAttrs}
@@ -139,6 +140,7 @@
 		<hr class="my-4" />
 
 		<DemoPlayground
+			code="RS02"
 			titleText="Container-responsive collapse (v2.0.0)"
 			subtitleText="Collapse to a count based on the control’s OWN box — not the viewport."
 			baseAttrs={collapseAttrs}
@@ -170,6 +172,7 @@
 		<hr class="my-4" />
 
 		<DemoPlayground
+			code="RS03"
 			titleText="RTL"
 			subtitleText="Add dir=&quot;rtl&quot; and the whole component mirrors — overlay included."
 			baseAttrs={rtlAttrs}

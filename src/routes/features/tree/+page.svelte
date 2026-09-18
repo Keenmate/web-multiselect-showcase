@@ -59,6 +59,35 @@
 		}
 	];
 
+	const searchBaseAttrs = {
+		...baseAttrs,
+		'search-placeholder': 'Search the tree…'
+	};
+
+	const searchControls: ControlDef[] = [
+		{
+			key: 'searchMode',
+			label: 'Search mode',
+			type: 'select',
+			attr: 'search-mode',
+			default: 'filter',
+			options: [
+				{ value: 'filter', label: 'filter — narrow to matches + ancestors' },
+				{ value: 'navigate', label: 'navigate — keep all rows, jump matches' }
+			]
+		},
+		{
+			key: 'minSearchLength',
+			label: 'Min search length',
+			type: 'number',
+			attr: 'min-search-length',
+			default: 0,
+			min: 0,
+			max: 3,
+			hint: 'Characters required before filtering starts.'
+		}
+	];
+
 	const leavesSetup = (el: any) => {
 		el.options = foodTree;
 		el.getIsSelectableCallback = (node: any) => !node.hasChildren;
@@ -86,6 +115,7 @@ el.getIsSelectableCallback = (node) => !node.hasChildren;`;
 		</p>
 
 		<DemoPlayground
+			code="TR01"
 			titleText="Interactive tree"
 			subtitleText="Flip cascade behaviour, value policy and breadcrumb badges on a live tree."
 			{baseAttrs}
@@ -105,6 +135,42 @@ el.getIsSelectableCallback = (node) => !node.hasChildren;`;
 		<hr class="my-4" />
 
 		<DemoPlayground
+			code="TR02"
+			titleText="Search & filter"
+			subtitleText="Ancestor-preserving filter vs. navigate match-jumping — and driving it from the API."
+			baseAttrs={searchBaseAttrs}
+			controls={searchControls}
+			{setup}
+			idText="tree-search"
+		>
+			{#snippet actions(el)}
+				<button type="button" class="btn btn-sm btn-outline-secondary" onclick={() => { el?.open(); el?.search('kale'); }}>
+					search("kale")
+				</button>
+				<button type="button" class="btn btn-sm btn-outline-secondary" onclick={() => { el?.open(); el?.search('root'); }}>
+					search("root")
+				</button>
+				<button type="button" class="btn btn-sm btn-outline-secondary" onclick={() => { el?.open(); el?.scrollToValue('2.2.1'); }}>
+					scrollToValue("2.2.1")
+				</button>
+				<button type="button" class="btn btn-sm btn-outline-secondary" onclick={() => el?.clearSearch()}>
+					clearSearch()
+				</button>
+			{/snippet}
+
+			{#snippet description()}
+				<ul class="mb-0">
+					<li><strong>Filter mode</strong> narrows the tree to matching nodes <em>plus their ancestors</em>, so <code>kale</code> still reads as <em>Vegetable › Leafy › Kale</em> — the hierarchy of the results is preserved.</li>
+					<li><strong>Navigate mode</strong> keeps the whole tree visible and highlights matches; jump between them with <kbd>Ctrl</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd> (a match navigator appears in the fullscreen overlay on touch).</li>
+					<li>The buttons drive the same behaviour from the imperative API: <code>search(term)</code> filters as if typed, <code>clearSearch()</code> restores the full tree, and <code>scrollToValue()</code> reaches any node since the tree is always expanded.</li>
+				</ul>
+			{/snippet}
+		</DemoPlayground>
+
+		<hr class="my-4" />
+
+		<DemoPlayground
+			code="TR03"
 			titleText="Selectable leaves only"
 			subtitleText="Mark branches as pure structure — only leaves are real choices."
 			{baseAttrs}

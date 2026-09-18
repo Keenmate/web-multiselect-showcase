@@ -49,6 +49,7 @@
 		</p>
 
 		<DemoPlayground
+			code="TT01"
 			titleText="Option & badge tooltips"
 			subtitleText="Toggle tooltips on rows and badges, then tune placement and cursor tracking."
 			{baseAttrs}

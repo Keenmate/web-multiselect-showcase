@@ -7,6 +7,8 @@
 	interface Props {
 		titleText: string;
 		subtitleText?: string;
+		/** Stable demo code shown before the title and used as the anchor (e.g. "TR02"). */
+		code?: string;
 		idText?: string;
 		tag?: string;
 		/** Attributes always applied to the element (and always shown in the snippet). */
@@ -33,6 +35,7 @@
 	let {
 		titleText,
 		subtitleText,
+		code,
 		idText,
 		tag = 'web-multiselect',
 		baseAttrs = {},
@@ -56,7 +59,11 @@
 	let config = $state<DemoConfig>(initialValues());
 	let elRef = $state<any>();
 
-	const anchorId = idText ?? titleText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+	const anchorId =
+		idText ??
+		(code
+			? code.toLowerCase()
+			: titleText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''));
 
 	// Reflect control config onto the live element.
 	$effect(() => {
@@ -79,11 +86,13 @@
 		config = initialValues();
 	}
 
-	let code = $derived(configToSnippet(controls, config, { tag, baseAttrs, trailer }));
+	let snippetCode = $derived(configToSnippet(controls, config, { tag, baseAttrs, trailer }));
 </script>
 
 <section class="demo-playground py-4" id={anchorId}>
-	<h2 class="h4 mb-1">{titleText}</h2>
+	<h2 class="h4 mb-1">
+		{#if code}<span class="demo-code">{code}</span> {/if}{titleText}
+	</h2>
 	{#if subtitleText}
 		<p class="text-muted mb-3">{subtitleText}</p>
 	{/if}
@@ -120,7 +129,7 @@
 	</div>
 
 	<div class="mt-3">
-		<CodeBlock codeContent={code} languageType={codeLang} titleText="Quick usage" />
+		<CodeBlock codeContent={snippetCode} languageType={codeLang} titleText="Quick usage" />
 	</div>
 
 	{#if description}
@@ -142,5 +151,17 @@
 	}
 	.demo-playground {
 		scroll-margin-top: 5rem;
+	}
+	.demo-code {
+		display: inline-block;
+		font-family: var(--bs-font-monospace, monospace);
+		font-size: 0.7em;
+		font-weight: 700;
+		letter-spacing: 0.04em;
+		color: var(--bs-primary, #3b82f6);
+		background: var(--bs-primary-bg-subtle, rgba(59, 130, 246, 0.12));
+		border-radius: 0.3rem;
+		padding: 0.1em 0.45em;
+		vertical-align: middle;
 	}
 </style>

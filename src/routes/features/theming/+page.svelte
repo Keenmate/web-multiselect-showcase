@@ -78,7 +78,7 @@
 		<hr class="my-4" />
 
 		<section id="live-theming" class="py-2">
-			<h2 class="h4 mb-1">Live theming</h2>
+			<h2 class="h4 mb-1">TH01 Live theming</h2>
 			<p class="text-muted mb-3">
 				Drag the sliders and pick an accent — the variables are written straight onto the
 				element, and the CSS snippet below updates to match.

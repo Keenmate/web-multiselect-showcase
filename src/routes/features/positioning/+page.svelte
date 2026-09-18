@@ -87,6 +87,7 @@
 		<hr class="my-4" />
 
 		<DemoPlayground
+			code="PO01"
 			titleText="Baseline & size controls"
 			subtitleText="No special ancestor CSS — the panel anchors to the viewport, under the input."
 			{baseAttrs}
@@ -118,6 +119,7 @@
 
 			<div style="transform: translateZ(0); border: 1px dashed var(--bs-border-color); padding: 1rem; border-radius: .5rem;">
 				<DemoPlayground
+					code="PO02"
 					titleText="Transformed wrapper"
 					subtitleText="transform establishes a containing block — browsers honor it, so the panel still lands under the input."
 					{baseAttrs}

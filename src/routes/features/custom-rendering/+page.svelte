@@ -75,6 +75,7 @@ el.renderBadgeCallback = (item, ctx) =>
 		</div>
 
 		<DemoPlayground
+			code="CR01"
 			titleText="Rich option rows"
 			subtitleText="renderOptionContentCallback builds a multi-line row with icon, label, and subtitle."
 			baseAttrs={optionBaseAttrs}
@@ -105,6 +106,7 @@ el.renderBadgeCallback = (item, ctx) =>
 		<hr class="my-4" />
 
 		<DemoPlayground
+			code="CR02"
 			titleText="Whole-badge rendering (v2.0.0)"
 			subtitleText="renderBadgeCallback replaces the entire pill — here a Bootstrap badge with its own remove button."
 			baseAttrs={badgeBaseAttrs}

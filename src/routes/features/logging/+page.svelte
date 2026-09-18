@@ -89,7 +89,7 @@ el.enableLogging('debug');`;
 		</div>
 
 		<section class="py-2">
-			<h2 class="h4 mb-1">Live demo</h2>
+			<h2 class="h4 mb-1">LG01 Live demo</h2>
 			<p class="text-muted mb-3">
 				Set a level, then interact with the picker to produce console output.
 			</p>

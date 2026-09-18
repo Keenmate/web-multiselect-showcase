@@ -57,6 +57,7 @@
 		</p>
 
 		<DemoPlayground
+			code="BU01"
 			titleText="Interactive multiselect"
 			subtitleText="Selection mode, search, badges and the new inline clear button in one place."
 			{baseAttrs}
@@ -76,6 +77,7 @@
 		<hr class="my-4" />
 
 		<DemoPlayground
+			code="BU02"
 			titleText="Single-select mode"
 			subtitleText="Set multiple=false for a classic single-choice picker."
 			baseAttrs={{

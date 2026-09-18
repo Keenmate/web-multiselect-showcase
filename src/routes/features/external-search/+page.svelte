@@ -77,6 +77,7 @@ el.searchCallback = async (term, signal) => {
 		</p>
 
 		<DemoPlayground
+			code="ES01"
 			titleText="Async searchCallback"
 			subtitleText="Debounced, min-length-gated async search with AbortSignal cancellation."
 			{baseAttrs}

@@ -62,6 +62,7 @@ el.options = [
 		</p>
 
 		<DemoPlayground
+			code="DA01"
 			titleText="Data shapes"
 			subtitleText="Member attributes map your object properties onto the control."
 			baseAttrs={{
@@ -99,6 +100,7 @@ el.options = [
 		<hr class="my-4" />
 
 		<DemoPlayground
+			code="DA02"
 			titleText="Form value-format"
 			subtitleText="A named control auto-creates hidden inputs so it submits like any native field."
 			baseAttrs={{
@@ -132,6 +134,7 @@ el.options = [
 		<hr class="my-4" />
 
 		<DemoPlayground
+			code="DA03"
 			titleText="Imperative API (v2.0.0)"
 			subtitleText="Drive the dropdown, the search box and scrolling from your own code."
 			baseAttrs={{

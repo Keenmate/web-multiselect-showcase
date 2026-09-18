@@ -133,6 +133,7 @@ el.actionButtons = [
 		</p>
 
 		<DemoPlayground
+			code="AB01"
 			titleText="Built-in + custom actions"
 			subtitleText="Select all and Clear come wired; a custom button selects the first three."
 			{baseAttrs}
@@ -162,6 +163,7 @@ el.actionButtons = [
 		<hr class="my-4" />
 
 		<DemoPlayground
+			code="AB02"
 			titleText="Dynamic buttons"
 			subtitleText="Text, visibility and disabled state driven by callbacks that re-evaluate on every selection change."
 			{baseAttrs}

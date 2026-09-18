@@ -57,6 +57,7 @@
 		</ul>
 
 		<DemoPlayground
+			code="VS01"
 			titleText="15,000 options"
 			subtitleText="A flat list of 15,000 items — try scrolling, searching, and the jump buttons."
 			{baseAttrs}

@@ -150,7 +150,7 @@ el.addEventListener('add', (e) => {
 
 		<!-- Demo 1: live event log -->
 		<section class="demo-playground py-4" id="events">
-			<h2 class="h4 mb-1">Events</h2>
+			<h2 class="h4 mb-1">EV01 Events</h2>
 			<p class="text-muted mb-3">
 				Select and deselect options to watch <code>select</code> and <code>change</code> fire.
 			</p>
@@ -223,6 +223,7 @@ el.addEventListener('add', (e) => {
 
 		<!-- Demo 2: beforeSelectCallback veto -->
 		<DemoPlayground
+			code="EV02"
 			titleText="beforeSelectCallback veto"
 			subtitleText="Intercept a selection before it happens and cap the picks at three."
 			baseAttrs={vetoAttrs}
@@ -249,6 +250,7 @@ el.addEventListener('add', (e) => {
 
 		<!-- Demo 3: add-new creation -->
 		<DemoPlayground
+			code="EV03"
 			titleText="Add-new creation (v2.0.0)"
 			subtitleText="Turn the picker into a creation tool — type something new and add it on the fly."
 			baseAttrs={addAttrs}
