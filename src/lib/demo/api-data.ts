@@ -184,11 +184,10 @@ export const methodGroups: ApiGroup[] = [
 		title: 'Selection',
 		rows: [
 			{ name: 'getSelected()', type: '() => T[]', description: 'Currently selected option objects.' },
-			{ name: 'setSelected(values, opts?)', type: '(values, { notify? }) => void', description: 'Set selected values. <code>notify: true</code> fires <code>change</code>.' },
+			{ name: 'setSelected(values, opts?)', type: '(values, { notify? }) => void', description: 'Set selected values (pass <code>[]</code> to clear). <code>notify: true</code> fires <code>change</code>.' },
 			{ name: 'getValue()', type: '() => string | number | (…)[] | null', description: 'Serialized value per <code>value-format</code>.' },
 			{ name: 'selectedValue', type: 'getter', description: 'Read-only serialized value.' },
-			{ name: 'selectedItem', type: 'getter', description: 'First selected option (single-select) or null.' },
-			{ name: 'clearAll()', type: '() => void', description: 'Clear the selection (used by form reset).' }
+			{ name: 'selectedItem', type: 'getter', description: 'First selected option (single-select) or null.' }
 		]
 	},
 	{
@@ -218,7 +217,6 @@ export const methodGroups: ApiGroup[] = [
 		rows: [
 			{ name: 'showMessage(content, opts?)', type: '(content, { variant?, duration?, placement? }) => void', since: 'v2.0.0', description: 'Show a transient toast (visible even in the fullscreen overlay).' },
 			{ name: 'hideMessage()', type: '() => void', since: 'v2.0.0', description: 'Dismiss the transient message.' },
-			{ name: 'setPresentation(mode)', type: "('floating' | 'fullscreen') => void", description: 'Switch presentation mode programmatically.' },
 			{ name: 'destroy()', type: '() => void', description: 'Clean up (called automatically on disconnect).' }
 		]
 	}
@@ -240,7 +238,19 @@ export const callbackGroups: ApiGroup[] = [
 			{ name: 'getGroupCallback', type: '(item) => string', description: 'Compute the group name.' },
 			{ name: 'getDisabledCallback', type: '(item) => boolean', description: 'Compute disabled state.' },
 			{ name: 'getFullTitleCallback', type: '(item) => string', description: 'Compute the full/long title.' },
-			{ name: 'getBadgeDisplayCallback', type: '(item) => string', description: 'Compute badge text (separate from the label).' }
+			{ name: 'getBadgeDisplayCallback', type: '(item) => string', description: 'Compute badge text (separate from the label).' },
+			{ name: 'getPathCallback', type: '(item) => string', since: 'v2.0.0', description: 'Compute a node’s materialized tree path (counterpart to <code>path-member</code>; enables tree mode).' },
+			{ name: 'getIsSelectableCallback', type: '(node) => boolean', since: 'v2.0.0', description: 'Tree only. Whether a node is selectable — receives the built node, so it can read <code>node.hasChildren</code> (e.g. leaves-only). Counterpart to <code>is-selectable-member</code>.' }
+		]
+	},
+	{
+		title: 'Tooltips & formatting',
+		blurb: 'Property-only callbacks for tooltip content and value formatting.',
+		rows: [
+			{ name: 'getOptionTooltipCallback', type: '(item) => string | HTMLElement', description: 'Tooltip content for an option row (default: label + subtitle). Requires <code>enable-option-tooltips</code>.' },
+			{ name: 'getBadgeTooltipCallback', type: '(item) => string | HTMLElement', description: 'Tooltip content for a badge. Requires <code>enable-badge-tooltips</code>.' },
+			{ name: 'getRemoveButtonTooltipCallback', type: '(item) => string', description: 'Tooltip text (title attribute) for a badge’s remove (×) button.' },
+			{ name: 'getValueFormatCallback', type: '(values) => string', description: 'Serialize the selected values for the hidden form input (overrides <code>value-format</code>).' }
 		]
 	},
 	{
@@ -294,11 +304,23 @@ export const cssVarGroups: ApiGroup[] = [
 		]
 	},
 	{
+		title: 'Colors & accent',
+		blurb: 'The accent drives focus borders, checkboxes, selected rows and badges — set <code>--ms-accent-color</code> alone to recolor most of the component. Each falls back to a <code>--base-*</code> token (see the note at the top), then a hardcoded, <code>light-dark()</code>-aware default.',
+		rows: [
+			{ name: '--ms-accent-color', type: 'color', default: 'var(--base-accent-color, #3b82f6)', description: 'Primary accent — focus border, checkbox fill, selected/matched tint, counter, badge remove.' },
+			{ name: '--ms-accent-color-hover', type: 'color', default: 'var(--base-accent-color-hover)', description: 'Accent hover state.' },
+			{ name: '--ms-accent-color-light', type: 'color', description: 'Soft accent tint used behind badges / “+X more” / popover header (a <code>light-dark()</code> pair).' },
+			{ name: '--ms-text-color-1', type: 'color', description: 'Primary text (headings/labels). <code>--ms-text-color-2/3/4</code> step down to muted/disabled.' },
+			{ name: '--ms-border-color', type: 'color', default: 'var(--base-border-color)', description: 'Shared border color for the field, dropdown, groups and checkboxes. One knob for every edge.' }
+		]
+	},
+	{
 		title: 'Input / field',
 		rows: [
 			{ name: '--ms-input-bg', type: 'color', description: 'Field background.' },
-			{ name: '--ms-input-border-color', type: 'color', description: 'Field border.' },
-			{ name: '--ms-input-border-color-focus', type: 'color', description: 'Field border on focus.' },
+			{ name: '--ms-input-border', type: 'border', description: 'Field border (shorthand, e.g. <code>1px solid #cbd5e1</code>). Defaults to <code>1px solid var(--ms-border-color)</code> — set <code>--ms-border-color</code> to recolor every edge at once.' },
+			{ name: '--ms-input-border-hover', type: 'border', description: 'Field border on hover. Defaults to <code>1px solid var(--ms-accent-color)</code>.' },
+			{ name: '--ms-input-border-focus', type: 'border', description: 'Field border on focus. Defaults to <code>1px solid var(--ms-accent-color)</code>.' },
 			{ name: '--ms-input-border-radius', type: 'length', description: 'Field corner radius.' },
 			{ name: '--ms-input-padding-h', type: 'length', since: 'v2.0.0', description: 'Horizontal field padding (replaces removed <code>--ms-input-padding*</code>).' },
 			{ name: '--ms-input-gap', type: 'length', since: 'v2.0.0', description: 'Spacing between input, counter, clear and toggle.' },
@@ -325,6 +347,15 @@ export const cssVarGroups: ApiGroup[] = [
 			{ name: '--ms-tooltip-bg', type: 'color', description: 'Shared tooltip background.' },
 			{ name: '--ms-option-tooltip-bg', type: 'color', description: 'Option tooltip background (overrides shared).' },
 			{ name: '--ms-option-tooltip-max-width', type: 'length', description: 'Option tooltip max width.' }
+		]
+	},
+	{
+		title: 'Transient message / toast (v2.0.0)',
+		blurb: 'The <code>showMessage()</code> toast (also raised by a veto callback returning a reason). Per-variant colors default to <code>--base-*</code> status tones.',
+		rows: [
+			{ name: '--ms-message-info-bg / --ms-message-info-color', type: 'color', since: 'v2.0.0', description: 'Info variant (reuses the tooltip surface).' },
+			{ name: '--ms-message-warning-bg / --ms-message-error-bg / --ms-message-success-bg', type: 'color', since: 'v2.0.0', description: 'Status-tone backgrounds (default to <code>--base-warning/danger/success-bg</code>).' },
+			{ name: '--ms-message-border-radius / --ms-message-padding', type: 'length', since: 'v2.0.0', description: 'Toast shape.' }
 		]
 	},
 	{

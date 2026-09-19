@@ -16,8 +16,8 @@
 	// One style string, applied to the <web-multiselect> element directly.
 	let styleVars = $derived(
 		`--ms-rem: ${rem}px;` +
-			` --ms-input-border-color: ${accent};` +
-			` --ms-input-border-color-focus: ${accent};` +
+			` --ms-accent-color: ${accent};` +
+			` --ms-input-border: 1px solid ${accent};` +
 			` --ms-option-bg-selected: ${accent}22;` +
 			` --ms-option-bg-hover: ${accent}18;` +
 			` --ms-input-border-radius: ${radius}px`
@@ -31,8 +31,8 @@
 	let cssCode = $derived(
 		`web-multiselect {\n` +
 			`  --ms-rem: ${rem}px;\n` +
-			`  --ms-input-border-color: ${accent};\n` +
-			`  --ms-input-border-color-focus: ${accent};\n` +
+			`  --ms-accent-color: ${accent};\n` +
+			`  --ms-input-border: 1px solid ${accent};\n` +
 			`  --ms-option-bg-selected: ${accent}22;\n` +
 			`  --ms-option-bg-hover: ${accent}18;\n` +
 			`  --ms-input-border-radius: ${radius}px;\n` +
@@ -123,7 +123,7 @@
 
 						<div class="mb-3">
 							<label for="accent-color" class="form-label small mb-1">
-								Accent — <code>--ms-input-border-color</code> / <code>--ms-option-bg-selected</code>
+								Accent — <code>--ms-accent-color</code> / <code>--ms-input-border</code>
 							</label>
 							<input
 								id="accent-color"

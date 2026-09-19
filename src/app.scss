@@ -173,7 +173,8 @@
 // Custom styling overrides for demos
 .custom-multiselect {
 	// Example custom styling that can be shown in custom styling examples
-	--ms-input-border-color: var(--bs-primary);
-	--ms-input-border-color-focus: var(--bs-info);
+	--ms-accent-color: var(--bs-primary);
+	--ms-input-border: 1px solid var(--bs-primary);
+	--ms-input-border-focus: 1px solid var(--bs-info);
 	--ms-option-bg-selected: var(--bs-primary-bg-subtle);
 }
