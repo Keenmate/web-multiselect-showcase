@@ -90,9 +90,7 @@
 </script>
 
 <section class="demo-playground py-4" id={anchorId}>
-	<h2 class="h4 mb-1">
-		{#if code}<span class="demo-code">{code}</span> {/if}{titleText}
-	</h2>
+	<h2 class="h4 mb-1">{code ? `${code} ${titleText}` : titleText}</h2>
 	{#if subtitleText}
 		<p class="text-muted mb-3">{subtitleText}</p>
 	{/if}
@@ -151,17 +149,5 @@
 	}
 	.demo-playground {
 		scroll-margin-top: 5rem;
-	}
-	.demo-code {
-		display: inline-block;
-		font-family: var(--bs-font-monospace, monospace);
-		font-size: 0.7em;
-		font-weight: 700;
-		letter-spacing: 0.04em;
-		color: var(--bs-primary, #3b82f6);
-		background: var(--bs-primary-bg-subtle, rgba(59, 130, 246, 0.12));
-		border-radius: 0.3rem;
-		padding: 0.1em 0.45em;
-		vertical-align: middle;
 	}
 </style>
