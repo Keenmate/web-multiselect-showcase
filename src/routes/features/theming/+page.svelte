@@ -65,7 +65,7 @@
 			</li>
 			<li>
 				Colors, borders and radii are per-concern <code>--ms-*</code> variables that default
-				to <code>--base-*</code> tokens, so a design system can theme every KeenMate
+				to <code>--base-*</code> tokens, so a design system can theme every Keenmate
 				component at once.
 			</li>
 			<li>

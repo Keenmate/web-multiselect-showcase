@@ -10,7 +10,7 @@ web-multiselect {
   --ms-option-bg-selected: #eef2ff;
 }`;
 
-	const baseExample = `/* One design-system layer themes EVERY KeenMate component at once. */
+	const baseExample = `/* One design-system layer themes EVERY Keenmate component at once. */
 :root {
   --base-rem: 1rem;             /* global scale (html { font-size: 62.5% }) */
   --base-accent-color: #6366f1; /* --ms-accent-color inherits this */
@@ -46,7 +46,7 @@ web-multiselect {
 				<li>
 					<strong>Shared base token</strong> — if you don’t, it inherits a
 					<code>--base-*</code> counterpart. Setting <code>--base-accent-color</code> once on
-					<code>:root</code> themes this multiselect <em>and</em> every other KeenMate component
+					<code>:root</code> themes this multiselect <em>and</em> every other Keenmate component
 					(date-range picker, treeview, …) together — a single design-system layer.
 				</li>
 				<li>

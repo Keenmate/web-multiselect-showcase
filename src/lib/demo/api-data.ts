@@ -360,7 +360,7 @@ export const cssVarGroups: ApiGroup[] = [
 	},
 	{
 		title: 'Icons (base contract, v2.0.0)',
-		blurb: 'Each glyph flows from a <code>--base-icon-*</code> counterpart with a Lucide SVG fallback, so a theme can reskin all KeenMate components at once.',
+		blurb: 'Each glyph flows from a <code>--base-icon-*</code> counterpart with a Lucide SVG fallback, so a theme can reskin all Keenmate components at once.',
 		rows: [
 			{ name: '--ms-icon-chevron', type: 'image', since: 'v2.0.0', description: 'Dropdown toggle chevron.' },
 			{ name: '--ms-icon-check / --ms-icon-indeterminate', type: 'image', since: 'v2.0.0', description: 'Checkbox check / dash (mask glyphs).' },

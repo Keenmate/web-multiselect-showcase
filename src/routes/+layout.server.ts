@@ -10,12 +10,12 @@ const config: PartialDocsConfig = {
 		title: 'Web MultiSelect Showcase',
 		description: 'Complete showcase and documentation for @keenmate/web-multiselect component library',
 		keywords: ['multiselect', 'multi-select', 'select', 'dropdown', 'typeahead', 'autocomplete', 'web-component', 'showcase', 'keenmate'],
-		author: 'KeenMate',
+		author: 'Keenmate s.r.o.',
 		url: 'https://web-multiselect.keenmate.com',
 		language: 'en'
 	},
 	company: {
-		name: 'KeenMate',
+		name: 'Keenmate s.r.o.',
 		website: 'https://keenmate.com?utm_source=web-multiselect-showcase',
 		social: {
 			github: 'https://github.com/keenmate/web-multiselect'

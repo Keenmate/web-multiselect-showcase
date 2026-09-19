@@ -77,7 +77,7 @@ el.enableLogging('debug');`;
 >
 	<div class="py-3">
 		<p class="lead">
-			Every KeenMate component publishes an entry on
+			Every Keenmate component publishes an entry on
 			<code>window.components['web-multiselect']</code>. It exposes package metadata, the live list of
 			connected instances, and a logging bundle. Logs are written to the browser console under four
 			categories: <code>INIT</code>, <code>DATA</code>, <code>UI</code>, and <code>INTERACTION</code>.
