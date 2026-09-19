@@ -23,11 +23,19 @@ No test suite or linter is configured.
 - **Styling**: SCSS with Bootstrap 5, `@keenmate/svelte-docs` theme, and `@keenmate/web-multiselect` styles — all imported in `src/app.scss`
 - **Layout system**: `@keenmate/svelte-docs` provides the docs shell (`ConfigProvider`). Site config (navigation, metadata, analytics) is defined in `src/routes/+layout.server.ts`. The layout in `+layout.svelte` injects the library version badge into the navbar at runtime.
 - **Version injection**: `vite.config.ts` reads the version from `@keenmate/web-multiselect/package.json` and exposes it as `__MULTISELECT_VERSION__` compile-time constant.
-- **Routes** map directly to documentation sections:
+- **Interactive-demo harness** (`src/lib/demo/`, added in the v2.0.0 rebuild): showcase demos are *curated and controls-driven*, not static. Reuse these instead of hand-rolling demos:
+  - `DemoPlayground.svelte` — renders a live `<web-multiselect>`, a control panel, and a **live** "Quick usage" code snippet. Props: `baseAttrs` (always-applied attributes), `controls` (`ControlDef[]`), `initialConfig`, `setup(el)` (for object/array/callback props like `options`, `actionButtons`, `render*Callback`), `trailer`, and `{#snippet description()}` / `{#snippet actions(el)}` (imperative buttons). Config values are reflected onto the element via `$effect`; attributes equal to their `default` are omitted (keeps snippets minimal).
+  - `Control.svelte` — one toggle/select/number/text control bound to the config.
+  - `codegen.ts` — `configToSnippet()` builds the live HTML snippet; defines `ControlDef`.
+  - `PropTable.svelte` — renders an API table from an `ApiRow[]`.
+  - `api-data.ts` — **single source of truth** for the API-reference pages (attributes, events, methods, callbacks, CSS variables, breaking changes). Update this when the library API changes.
+  - `samples.ts` — shared demo datasets (technologies, countries, foodTree, arabicOptions, makeLargeDataset).
+  - CSS-variable-driven demos (theming) and registry/logging demos are hand-authored with `<web-multiselect bind:this>` since they aren't attribute-driven.
+- **Routes** map to documentation sections (13-topic taxonomy mirroring the library's example suite):
   - `/` — homepage
   - `/getting-started` — installation/setup guide
-  - `/features/*` — feature demos (basic, groups, flexible-data, async-search, virtual-scrolling, display-modes, rtl, custom-styling, etc.)
-  - `/api/*` — API reference (component, properties, events, security, logging)
+  - `/features/*` — `basic`, `data-api`, `events-callbacks`, `tree`, `custom-rendering`, `action-buttons`, `tooltips`, `responsive` (incl. RTL), `external-search`, `virtual-scrolling`, `positioning`, `theming`, `logging`
+  - `/api/*` — `properties`, `events`, `methods`, `callbacks`, `css-variables`, `security`, `migration`
 - **Docker**: Multi-stage build (node:alpine -> nginx:alpine) with CSP headers configured in the Dockerfile's inline nginx config.
 - **Analytics**: Plausible analytics via script tag in the `analyticsScripts` config array in `+layout.server.ts`.
 

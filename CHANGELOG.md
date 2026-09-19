@@ -7,7 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
+### Changed — v2.0.0 rebuild
+- **Updated `@keenmate/web-multiselect` to `^2.0.0`** (from `^1.11.0`). The navbar version badge auto-derives from the installed package, so it now reads `v2.0.0`.
+- **New interactive-demo harness** (`src/lib/demo/`): the showcase now presents *curated, controls-driven* demos instead of many static sections. `DemoPlayground.svelte` renders a live `<web-multiselect>`, a panel of toggle/select/number controls, and a **Quick usage** code snippet that updates live from the current control state (`codegen.ts`). Supporting pieces: `Control.svelte`, `PropTable.svelte`, `samples.ts` (shared datasets) and `api-data.ts` (the single source of truth for the API-reference pages).
+- **Restructured navigation to the 13-topic taxonomy** matching the library's example suite:
+  - Features: `basic`, `data-api`, `events-callbacks`, `tree`, `custom-rendering`, `action-buttons`, `tooltips`, `responsive` (incl. RTL), `external-search`, `virtual-scrolling`, `positioning`, `theming`, `logging`.
+  - API Reference: `properties`, `events`, `methods`, `callbacks`, `css-variables`, `security`, `migration`.
+  - Removed the old `features/{groups,flexible-data,value-format,form-integration,async-search,display-modes,rtl,advanced-features,custom-styling}` and `api/{component,logging}` routes (folded into the new pages).
+- **Documented every v2.0.0 feature**: add-new creation mode (async `addNewCallback`, `allow-add-new`, the new `add` event), imperative open/close (`open`/`close`/`toggle`/`isOpen`), search-text control (`search`/`searchText`/`clearSearch`), the scroll-to API (`scrollToIndex`/`scrollToValue`/`scrollToGroup`), tree mode (path members, `checkbox-mode`, `cascade-select-policy`, selectable-leaves), container-responsive `collapse-badges-below`, the inline `show-clear` button, `renderBadgeCallback`, overlay groups, and the base-icon theming contract.
+- **New `api/migration` page** documenting the v1 → v2 breaking changes — most importantly that the `onSelect`/`onDeselect`/`onChange` handler properties now receive a `CustomEvent`, plus the removed field-shell CSS variables.
+- **Homepage & getting-started refreshed** for v2.0.0: new feature cards (tree, add-new, scroll-to), dropped the stale "25× / 99.8%" benchmark copy, fixed the `document.querySelector('multi-select')` bug, modernized the Svelte example to runes, and added a v2 upgrade banner linking to the migration notes.
+
+### Previous (v1.11.0)
 - **Updated `@keenmate/web-multiselect` to `^1.11.0`** (from `^1.10.0`). The navbar version badge auto-derives from the installed package, so it now reads `v1.11.0`.
   - **Automatic OS-aware dark mode** — the library's `--base-*` color defaults now resolve via CSS `light-dark()`. A page-level `color-scheme: dark` yields readable dark defaults with zero `--ms-*` overrides. Documented in `features/custom-styling` via a new "New in v1.11.0" callout and a note on the custom dark-theme demo (manual full overrides are now opt-in, not required for basic dark support).
   - **Dropdown positioning hardened** (library-internal, no showcase code change) — fixes sideways drift when an option is wider than the input, and mis-anchoring when an ancestor uses `container-type` / `contain`; a one-time `console.warn` now names the culprit element when a containing-block property still forces drift.
