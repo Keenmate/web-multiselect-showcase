@@ -49,6 +49,68 @@ el.options = [
 	};
 
 	let currentValue = $state('(not read yet)');
+
+	// --- Demo 4: deferred initialization (defer / ready, v2.1.0) -------------
+	let deferEl = $state<any>();
+	let deferStatus = $state('held — waiting for data…');
+	let deferNonce = $state(0); // bump to remount a fresh deferred element (Replay)
+	let deferWired: any = null;
+	let releaseDefer: (() => void) | null = null;
+
+	function startDeferDemo(el: any) {
+		// Wire the badge color + options WHILE held — nothing paints yet.
+		el.customStylesCallback = () =>
+			`.ms__badge { background: #6d28d9; color: #fff; border-color: #6d28d9; }`;
+		el.options = technologies;
+		el.addEventListener(
+			'ready',
+			() => { deferStatus = `isReady: ${el.isReady} — built flash-free ✓`; },
+			{ once: true }
+		);
+
+		// Simulate a 2 s data load: hold, count down, then build once on release.
+		const DELAY = 2000;
+		const start = performance.now();
+		let released = false;
+		releaseDefer = () => {
+			if (released) return;
+			released = true;
+			el.ready(); // builds once, with options + styles already applied
+		};
+		const tick = () => {
+			if (released || el !== deferEl) return; // stop if replaced by a Replay
+			const remain = Math.max(0, DELAY - (performance.now() - start));
+			deferStatus = `held — building in ${(remain / 1000).toFixed(1)}s (loading options, no flash)`;
+			if (remain > 0) requestAnimationFrame(tick);
+			else releaseDefer?.();
+		};
+		requestAnimationFrame(tick);
+	}
+
+	// Wire each freshly-mounted deferred element (initial mount + every Replay).
+	$effect(() => {
+		if (deferEl && deferEl !== deferWired) {
+			deferWired = deferEl;
+			startDeferDemo(deferEl);
+		}
+	});
+
+	function replayDefer() {
+		deferStatus = 'held — waiting for data…';
+		deferWired = null;
+		releaseDefer = null;
+		deferNonce++;
+	}
+
+	const deferExample = `<!-- defer holds the first render through the upgrade race -->
+<web-multiselect defer id="skills"></web-multiselect>
+
+const el = document.querySelector('#skills');
+el.options = await loadSkills();
+el.customStylesCallback = () => \`.ms__badge { background: var(--brand); color: #fff; }\`;
+el.addEventListener('change', (e) => console.log(e.detail.selectedValues));
+el.ready();          // build once — styled badges appear in one shot, no flash
+// (or, server-driven e.g. LiveView: just remove the \`defer\` attribute)`;
 </script>
 
 <DocLayout
@@ -182,5 +244,62 @@ el.options = [
 				</ul>
 			{/snippet}
 		</DemoPlayground>
+
+		<hr class="my-4" />
+
+		<section class="py-2" id="deferred-init">
+			<h2 class="h4 mb-1">DA04 · Deferred initialization (v2.1.0)</h2>
+			<p class="text-muted mb-3">
+				A custom element upgrades the instant its script loads and paints with the component's
+				<em>default</em> styles, so anything you wire in afterward — a
+				<code>customStylesCallback</code>, your options — lands a beat late and the badges visibly
+				restyle: the classic flash. The <code>defer</code> attribute holds the first render until
+				you release it.
+			</p>
+
+			<div class="multiselect-demo">
+				{#key deferNonce}
+					<web-multiselect
+						bind:this={deferEl}
+						defer
+						value-member="value"
+						display-value-member="label"
+						icon-member="icon"
+						initial-values={'["js","ts","svelte"]'}
+						search-placeholder="Search technologies…"
+					></web-multiselect>
+				{/key}
+
+				<div class="d-flex flex-wrap gap-2 align-items-center mt-3">
+					<button type="button" class="btn btn-sm btn-primary" onclick={() => releaseDefer?.()}>
+						release now (ready())
+					</button>
+					<button type="button" class="btn btn-sm btn-outline-secondary" onclick={replayDefer}>
+						Replay
+					</button>
+					<code class="small text-muted">{deferStatus}</code>
+				</div>
+			</div>
+
+			<ul class="mt-3 mb-3">
+				<li>
+					While <code>defer</code> is set the element builds <strong>nothing</strong> on upgrade
+					(it only reserves space via <code>:host([defer]:not([is-ready]))</code>), so you wire
+					<code>options</code>, callbacks and listeners first.
+				</li>
+				<li>
+					<code>ready()</code> — or removing the <code>defer</code> attribute, which suits
+					server-driven frameworks like Phoenix LiveView — builds the picker <strong>once</strong>,
+					with the purple pre-selected badges appearing in one shot. The gate is latched.
+				</li>
+				<li>
+					<code>isReady</code> is reflected as an <code>is-ready</code> attribute, and a one-time
+					<code>ready</code> event fires right after the first build. See the
+					<a href="/api/methods">methods</a> page.
+				</li>
+			</ul>
+
+			<CodeBlock codeContent={deferExample} languageType="javascript" titleText="defer / ready()" />
+		</section>
 	</div>
 </DocLayout>

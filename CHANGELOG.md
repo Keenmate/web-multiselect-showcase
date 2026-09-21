@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed — v2.1.0 (library `defer` / `ready()` render gate)
+- **Updated `@keenmate/web-multiselect` to `^2.1.0`** (from `^2.0.0`). The navbar version badge auto-derives from the installed package, so it now reads `v2.1.0`.
+- **Documented the new `defer` render gate** in the API source of truth (`src/lib/demo/api-data.ts`), so it flows through to the `/api/properties`, `/api/events` and `/api/methods` pages: the `defer` attribute (new *Lifecycle* group), the `ready` event, and the `ready()` method + `isReady` getter (in *Messaging & lifecycle*), all tagged `since: v2.1.0`.
+- **New interactive demo `DA04 · Deferred initialization`** on `/features/data-api`: a hand-authored, `bind:this`-driven demo that holds a deferred `<web-multiselect>` through a simulated 2&nbsp;s data load (live countdown), then releases it with `ready()` so the pre-selected, badge-coloured options appear in one shot — no default-style flash. Includes **Replay** (remounts a fresh deferred element) and **release now (`ready()`)** buttons plus a copy-pasteable `defer` / `ready()` snippet.
+
 ### Changed — v2.0.0 rebuild
 - **Updated `@keenmate/web-multiselect` to `^2.0.0`** (from `^1.11.0`). The navbar version badge auto-derives from the installed package, so it now reads `v2.0.0`.
 - **New interactive-demo harness** (`src/lib/demo/`): the showcase now presents *curated, controls-driven* demos instead of many static sections. `DemoPlayground.svelte` renders a live `<web-multiselect>`, a panel of toggle/select/number controls, and a **Quick usage** code snippet that updates live from the current control state (`codegen.ts`). Supporting pieces: `Control.svelte`, `PropTable.svelte`, `samples.ts` (shared datasets) and `api-data.ts` (the single source of truth for the API-reference pages).

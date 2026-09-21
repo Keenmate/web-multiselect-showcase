@@ -163,6 +163,12 @@ export const attributeGroups: ApiGroup[] = [
 			{ name: 'actions-align', type: "'stretch' | 'left' | 'right' | 'center' | 'space-between'", default: 'stretch', description: 'Horizontal alignment of the buttons.' },
 			{ name: 'sticky-actions', type: 'boolean', default: 'true', description: 'Keep the action bar pinned while the list scrolls.' }
 		]
+	},
+	{
+		title: 'Lifecycle',
+		rows: [
+			{ name: 'defer', type: 'boolean', default: 'false', since: 'v2.1.0', description: 'Hold the first render. When present the component builds nothing on upgrade (reserves space only) — wire <code>options</code>, callbacks (e.g. <code>customStylesCallback</code>) and listeners first, then release with <code>ready()</code> (or by removing the attribute) so it builds <strong>once</strong>, flash-free. Latched; reflects an <code>is-ready</code> attribute after building. CSS hook: <code>:host([defer]:not([is-ready]))</code>.' }
+		]
 	}
 ];
 
@@ -173,7 +179,8 @@ export const events: ApiRow[] = [
 	{ name: 'select', type: 'CustomEvent<MultiSelectEventDetail>', description: 'An option was selected via the UI. <code>detail.option</code>, <code>detail.selectedOptions</code>, <code>detail.selectedValues</code>.' },
 	{ name: 'deselect', type: 'CustomEvent<MultiSelectEventDetail>', description: 'An option was deselected via the UI.' },
 	{ name: 'change', type: 'CustomEvent<MultiSelectEventDetail>', description: 'The selection set changed (no single <code>option</code>).' },
-	{ name: 'add', type: 'CustomEvent<MultiSelectEventDetail>', since: 'v2.0.0', description: 'The user committed the add-new prompt. <code>detail.value</code> is the typed text; <code>detail.option</code> is the created option if <code>addNewCallback</code> produced one.' }
+	{ name: 'add', type: 'CustomEvent<MultiSelectEventDetail>', since: 'v2.0.0', description: 'The user committed the add-new prompt. <code>detail.value</code> is the typed text; <code>detail.option</code> is the created option if <code>addNewCallback</code> produced one.' },
+	{ name: 'ready', type: 'CustomEvent', since: 'v2.1.0', description: 'Fired once, right after the first build — synchronously during upgrade for a normal element, or when a <code>defer</code> gate is released for a deferred one. No detail.' }
 ];
 
 // ---------------------------------------------------------------------------
@@ -215,6 +222,8 @@ export const methodGroups: ApiGroup[] = [
 	{
 		title: 'Messaging & lifecycle',
 		rows: [
+			{ name: 'ready()', type: '() => void', since: 'v2.1.0', description: 'Release the <code>defer</code> render gate: build the picker once with everything wired while deferred (flushes pending writes first). No-op if not deferred or already built. Latched; fires the <code>ready</code> event.' },
+			{ name: 'isReady', type: 'getter', since: 'v2.1.0', description: 'Whether the picker has been built (the <code>ready</code> event has fired). False while a <code>defer</code> gate is held. Reflected as the <code>is-ready</code> attribute.' },
 			{ name: 'showMessage(content, opts?)', type: '(content, { variant?, duration?, placement? }) => void', since: 'v2.0.0', description: 'Show a transient toast (visible even in the fullscreen overlay).' },
 			{ name: 'hideMessage()', type: '() => void', since: 'v2.0.0', description: 'Dismiss the transient message.' },
 			{ name: 'destroy()', type: '() => void', description: 'Clean up (called automatically on disconnect).' }
