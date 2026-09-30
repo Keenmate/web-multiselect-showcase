@@ -55,6 +55,22 @@ el.renderBadgeCallback = (item, ctx) =>
   </span>\`;
 
 // Any element with data-action="remove" triggers deselect — no wiring needed.`;
+
+	// --- Demo 3: declarative custom-styles, no JavaScript (v2.2.0) ----------
+	const styledCss =
+		'.ms__badge { border-radius: 999px; font-weight: 600; background: #ecfeff; color: #0e7490; border: 1px solid #a5f3fc; } .ms__option:hover { background: #eef2ff; }';
+
+	const styledBaseAttrs = {
+		'value-member': 'value',
+		'display-value-member': 'label',
+		'icon-member': 'icon',
+		'search-placeholder': 'Search technologies…',
+		'custom-styles': styledCss
+	};
+
+	const styledSetup = (el: any) => {
+		el.options = technologies;
+	};
 </script>
 
 <DocLayout
@@ -65,7 +81,9 @@ el.renderBadgeCallback = (item, ctx) =>
 		<p class="lead">
 			The render callbacks return raw HTML (or a DOM element) so you can build rich option rows,
 			restyle badges, or replace a whole pill with a card. They are set imperatively on the element
-			in <code>setup(el)</code>, never as attributes.
+			in <code>setup(el)</code>, never as attributes. To restyle the shadow-DOM internals themselves
+			<strong>without any JavaScript</strong>, reach for the <code>custom-styles</code> attribute
+			(v2.2.0) — see <a href="#custom-styles">CR03</a> below.
 		</p>
 
 		<div class="alert alert-warning" role="alert">
@@ -138,5 +156,37 @@ el.renderBadgeCallback = (item, ctx) =>
 			languageType="javascript"
 			titleText="The whole-badge callback"
 		/>
+
+		<hr class="my-4" />
+
+		<DemoPlayground
+			code="CR03"
+			titleText="Declarative styling — custom-styles (v2.2.0)"
+			subtitleText="Style the shadow-DOM internals with a plain attribute — zero JavaScript."
+			baseAttrs={styledBaseAttrs}
+			setup={styledSetup}
+			idText="custom-styles"
+			demoNote="Select a few items — the badges are pill-shaped and the option hover is tinted, all from the custom-styles attribute above."
+		>
+			{#snippet description()}
+				<ul class="mb-0">
+					<li>
+						<code>custom-styles</code> takes raw CSS as a string and injects it <strong>verbatim</strong>
+						— selectors and all — into a replaceable style slot at the top of the shadow root, the same
+						slot <code>customStylesCallback</code> uses.
+					</li>
+					<li>
+						Because it's an attribute, static HTML, server-rendered markup, and no-build pages can restyle
+						internals like <code>.ms__badge</code> and <code>.ms__option</code> (and your own
+						custom-rendered content) with no script at all. It's reactive and mirrored by the
+						<code>customStyles</code> property.
+					</li>
+					<li>
+						When both are set, <code>customStylesCallback</code> wins — treat the attribute as the static
+						fallback.
+					</li>
+				</ul>
+			{/snippet}
+		</DemoPlayground>
 	</div>
 </DocLayout>

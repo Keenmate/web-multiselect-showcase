@@ -1,4 +1,4 @@
-// Single source of truth for the API-reference pages (v2.0.0).
+// Single source of truth for the API-reference pages (kept in sync with the library — currently v2.2.0).
 // Descriptions may contain inline HTML (rendered via {@html}).
 
 export interface ApiRow {
@@ -45,7 +45,7 @@ export const attributeGroups: ApiGroup[] = [
 			{ name: 'has-children-member', type: 'string', since: 'v2.0.0', description: 'Property flagging nodes that have children.' },
 			{ name: 'is-selectable-member', type: 'string', since: 'v2.0.0', description: 'Property marking a node selectable (false = no checkbox, skipped by keyboard).' },
 			{ name: 'tree-path-separator', type: 'string', default: '.', since: 'v2.0.0', description: 'Separator between path segments.' },
-			{ name: 'checkbox-mode', type: "'independent' | 'cascade'", default: 'independent', since: 'v2.0.0', description: 'Whether checking a node cascades to its subtree.' },
+			{ name: 'checkbox-mode', type: "'independent' | 'cascade'", default: 'cascade', since: 'v2.0.0', description: 'Whether checking a node cascades to its subtree. <strong>v2.2.0:</strong> now defaults to <code>cascade</code> (was <code>independent</code>) — checking a branch selects its whole subtree and branches render tristate. Set <code>independent</code> to keep per-node toggling. See the <a href="/api/migration">migration notes</a>.' },
 			{ name: 'cascade-select-policy', type: "'rolled-up' | 'leaves' | 'all'", default: 'rolled-up', since: 'v2.0.0', description: 'In cascade mode, which values are emitted.' }
 		]
 	},
@@ -58,7 +58,8 @@ export const attributeGroups: ApiGroup[] = [
 			{ name: 'close-on-select', type: 'boolean', default: 'false', description: 'Close the dropdown after each selection.' },
 			{ name: 'checkbox-align', type: "'top' | 'center' | 'bottom'", default: 'center', description: 'Vertical alignment of the checkbox in tall rows.' },
 			{ name: 'allow-add-new', type: 'boolean', default: 'false', since: 'v2.0.0', description: 'Show an “Add …” prompt when a search yields no matches.' },
-			{ name: 'overlay-group', type: 'string', since: 'v2.0.0', description: 'Coordinate “one overlay open at a time” across components sharing the group name.' }
+			{ name: 'overlay-group', type: 'string', since: 'v2.0.0', description: 'Coordinate “one overlay open at a time” across components sharing the group name.' },
+			{ name: 'group-select-mode', type: "'none' | 'cascade'", default: 'none', since: 'v2.2.0', description: 'In a flat (non-tree), multi-select, grouped list, <code>cascade</code> puts a <strong>tristate select-all checkbox</strong> on each group header — it checks/unchecks that group’s visible members and reads indeterminate when partial. The group name is never a value (<code>getValue()</code> / badges / form carry member values only). No effect in tree mode (use <code>checkbox-mode</code>) or single-select.' }
 		]
 	},
 	{
@@ -86,7 +87,9 @@ export const attributeGroups: ApiGroup[] = [
 			{ name: 'show-counter', type: 'boolean', default: 'false', description: 'Show a selected-count indicator in the input.' },
 			{ name: 'show-clear', type: 'boolean', default: 'false', since: 'v2.0.0', description: 'Show an inline ✕ clear button inside the input.' },
 			{ name: 'show-badge-full-title', type: 'boolean', default: 'false', description: 'Use the full title on badges.' },
-			{ name: 'enable-selected-popover', type: 'boolean', default: 'true', since: 'v2.0.0', description: 'Allow the selected-items popover to open (set false when you render your own selection UI).' }
+			{ name: 'enable-selected-popover', type: 'boolean', default: 'true', since: 'v2.0.0', description: 'Allow the selected-items popover to open (set false when you render your own selection UI).' },
+			{ name: 'selected-order', type: "'as-selected' | 'label-asc' | 'label-desc' | 'member' | 'custom'", default: 'as-selected', since: 'v2.2.0', description: 'Order of the <strong>selected</strong> items across badges, the partial “+N more” split (which items sit behind it), and the popover. <strong>Display-only</strong> — <code>getValue()</code>, form output and <code>getSelected()</code> always keep insertion order, and the dropdown is never reordered. <code>member</code> sorts by <code>selected-order-member</code> / <code>getSelectedOrderCallback</code>; <code>custom</code> uses <code>selectedOrderCompareCallback</code>.' },
+			{ name: 'selected-order-member', type: 'string', since: 'v2.2.0', description: 'Property used as the sort key when <code>selected-order="member"</code> — numeric keys sort numerically, everything else via a locale compare. Overridden by <code>getSelectedOrderCallback</code>.' }
 		]
 	},
 	{
@@ -162,6 +165,12 @@ export const attributeGroups: ApiGroup[] = [
 			{ name: 'actions-layout', type: "'nowrap' | 'wrap'", default: 'nowrap', description: 'Whether buttons wrap onto new rows.' },
 			{ name: 'actions-align', type: "'stretch' | 'left' | 'right' | 'center' | 'space-between'", default: 'stretch', description: 'Horizontal alignment of the buttons.' },
 			{ name: 'sticky-actions', type: 'boolean', default: 'true', description: 'Keep the action bar pinned while the list scrolls.' }
+		]
+	},
+	{
+		title: 'Styling',
+		rows: [
+			{ name: 'custom-styles', type: 'string (CSS)', since: 'v2.2.0', description: 'Raw CSS injected verbatim — selectors and all — into a replaceable style slot at the top of the shadow root. The declarative, <strong>no-JavaScript twin of <code>customStylesCallback</code></strong> (which still wins when both are set), so static HTML / server-rendered / no-build pages can restyle shadow-DOM internals (<code>.ms__badge</code>, <code>.ms__option</code>, …) and their own custom-rendered content. Mirrored by the <code>customStyles</code> property and reactive — changing or removing it re-applies or clears the slot.' }
 		]
 	},
 	{
@@ -247,7 +256,7 @@ export const callbackGroups: ApiGroup[] = [
 			{ name: 'getGroupCallback', type: '(item) => string', description: 'Compute the group name.' },
 			{ name: 'getDisabledCallback', type: '(item) => boolean', description: 'Compute disabled state.' },
 			{ name: 'getFullTitleCallback', type: '(item) => string', description: 'Compute the full/long title.' },
-			{ name: 'getBadgeDisplayCallback', type: '(item) => string', description: 'Compute badge text (separate from the label).' },
+			{ name: 'getBadgeDisplayCallback', type: '(item, ctx) => string', description: 'Compute badge text (separate from the label). <strong>v2.2.0:</strong> gets a <code>BadgeContentRenderContext</code> 2nd arg.' },
 			{ name: 'getPathCallback', type: '(item) => string', since: 'v2.0.0', description: 'Compute a node’s materialized tree path (counterpart to <code>path-member</code>; enables tree mode).' },
 			{ name: 'getIsSelectableCallback', type: '(node) => boolean', since: 'v2.0.0', description: 'Tree only. Whether a node is selectable — receives the built node, so it can read <code>node.hasChildren</code> (e.g. leaves-only). Counterpart to <code>is-selectable-member</code>.' }
 		]
@@ -256,25 +265,25 @@ export const callbackGroups: ApiGroup[] = [
 		title: 'Tooltips & formatting',
 		blurb: 'Property-only callbacks for tooltip content and value formatting.',
 		rows: [
-			{ name: 'getOptionTooltipCallback', type: '(item) => string | HTMLElement', description: 'Tooltip content for an option row (default: label + subtitle). Requires <code>enable-option-tooltips</code>.' },
-			{ name: 'getBadgeTooltipCallback', type: '(item) => string | HTMLElement', description: 'Tooltip content for a badge. Requires <code>enable-badge-tooltips</code>.' },
-			{ name: 'getRemoveButtonTooltipCallback', type: '(item) => string', description: 'Tooltip text (title attribute) for a badge’s remove (×) button.' },
+			{ name: 'getOptionTooltipCallback', type: '(item, ctx) => string | HTMLElement', description: 'Tooltip content for an option row (default: label + subtitle). Requires <code>enable-option-tooltips</code>. <strong>v2.2.0:</strong> gets an <code>OptionContentRenderContext</code> 2nd arg.' },
+			{ name: 'getBadgeTooltipCallback', type: '(item, ctx) => string | HTMLElement', description: 'Tooltip content for a badge. Requires <code>enable-badge-tooltips</code>. <strong>v2.2.0:</strong> gets a <code>BadgeContentRenderContext</code> 2nd arg.' },
+			{ name: 'getRemoveButtonTooltipCallback', type: '(item, ctx) => string', description: 'Tooltip text (title attribute) for a badge’s remove (×) button. <strong>v2.2.0:</strong> gets a context 2nd arg.' },
 			{ name: 'getValueFormatCallback', type: '(values) => string', description: 'Serialize the selected values for the hidden form input (overrides <code>value-format</code>).' }
 		]
 	},
 	{
 		title: 'Rendering (may emit raw HTML)',
-		blurb: 'These receive a presentation-aware context (<code>isFullscreen</code>, tree metadata) in v2.0.0.',
+		blurb: 'Every render callback receives a presentation-aware context as its 2nd argument (<code>presentation</code> / <code>isFullscreen</code> / <code>isModal</code>, plus tree/group metadata) — <strong>v2.2.0</strong> extended this to the selected-item and group callbacks too. All additive: one-argument callbacks keep working.',
 		rows: [
-			{ name: 'renderOptionContentCallback', type: '(item, ctx) => string | HTMLElement', description: 'Custom option-row content.' },
-			{ name: 'renderBadgeContentCallback', type: '(item, ctx) => string | HTMLElement', description: 'Custom content inside the built-in badge pill.' },
+			{ name: 'renderOptionContentCallback', type: '(item, ctx) => string | HTMLElement', description: 'Custom option-row content. <code>ctx</code> is an <code>OptionContentRenderContext</code>.' },
+			{ name: 'renderBadgeContentCallback', type: '(item, ctx) => string | HTMLElement', description: 'Custom content inside the built-in badge pill. <code>ctx</code> is a <code>BadgeContentRenderContext</code>.' },
 			{ name: 'renderBadgeCallback', type: '(item, ctx) => string | HTMLElement | null', since: 'v2.0.0', description: 'Own the whole badge markup. Return null to fall back to the default pill; use <code>data-action="remove"</code> for the remove control.' },
-			{ name: 'renderSelectedItemContentCallback', type: '(item) => string | HTMLElement', description: 'Custom selected item in the popover.' },
-			{ name: 'renderSelectedContentCallback', type: '(item) => string', description: 'Custom single-select display.' },
-			{ name: 'renderGroupLabelContentCallback', type: '(groupName) => string | HTMLElement', description: 'Custom group header.' },
-			{ name: 'getBadgeClassCallback', type: '(item) => string | string[]', description: 'Extra CSS classes for badges.' },
-			{ name: 'getSelectedItemClassCallback', type: '(item) => string | string[]', description: 'Extra CSS classes for popover items.' },
-			{ name: 'customStylesCallback', type: '() => string', description: 'Inject a CSS string into the shadow root.' }
+			{ name: 'renderSelectedItemContentCallback', type: '(item, ctx) => string | HTMLElement', since: 'v2.2.0', description: 'Custom selected item in the popover. <strong>v2.2.0:</strong> 2nd arg is a <code>BadgeContentRenderContext</code> (<code>isInPopover=true</code>).' },
+			{ name: 'renderSelectedContentCallback', type: '(item, ctx) => string', since: 'v2.2.0', description: 'Custom single-select display. <strong>v2.2.0:</strong> 2nd arg is a <code>SelectedContentRenderContext</code>.' },
+			{ name: 'renderGroupLabelContentCallback', type: '(groupName, ctx) => string | HTMLElement', since: 'v2.2.0', description: 'Custom group header. <strong>v2.2.0:</strong> 2nd arg is a <code>GroupLabelRenderContext</code> — <code>{ groupName, members, selectedMembers, selectedCount, memberCount, selectableCount, checkState }</code> plus the presentation fields — so a header can render its own per-group count/logic.' },
+			{ name: 'getBadgeClassCallback', type: '(item, ctx) => string | string[]', description: 'Extra CSS classes for badges. <strong>v2.2.0:</strong> receives the same <code>BadgeContentRenderContext</code> as its <code>render*</code> twin.' },
+			{ name: 'getSelectedItemClassCallback', type: '(item, ctx) => string | string[]', description: 'Extra CSS classes for popover items. <strong>v2.2.0:</strong> gets a context too (with <code>isInPopover</code>).' },
+			{ name: 'customStylesCallback', type: '() => string', description: 'Inject a CSS string into the shadow root. Declarative twin: the <code>custom-styles</code> attribute (this callback wins when both are set).' }
 		]
 	},
 	{
@@ -285,8 +294,11 @@ export const callbackGroups: ApiGroup[] = [
 			{ name: 'beforeSelectCallback', type: '(option, selected) => boolean | string | void', description: 'Veto a selection (false), or veto + toast (string).' },
 			{ name: 'beforeDeselectCallback', type: '(option, selected) => boolean | string | void', description: 'Veto a deselection (false), or veto + toast (string).' },
 			{ name: 'onSelect / onDeselect / onChange', type: '(e: CustomEvent) => void', description: 'Fire-and-forget handlers. <strong>v2.0.0:</strong> now receive a <code>CustomEvent</code>, not a bare option.' },
-			{ name: 'getCounterCallback', type: '(count, moreCount?) => string', description: 'Format the selected-count label (i18n / pluralization).' },
-			{ name: 'keydownCallback', type: '(ctx) => boolean | void', since: 'v2.0.0', description: 'Intercept keydown before built-in handling; return true to suppress. <code>ctx.controller</code> exposes focus/select helpers.' }
+			{ name: 'getCounterCallback', type: '(count, moreCount?) => string', description: 'Format the count-mode / “+N more” label (e.g. <code>3 selected</code>) — i18n / pluralization. Distinct from <code>getCountLabelCallback</code>, which formats the small chip.' },
+			{ name: 'getCountLabelCallback', type: '(selected, total) => string', since: 'v2.2.0', description: 'One formatter for the small count chip shown in <strong>both</strong> the in-input counter and each group header — so they always read the same. Default <code>[selected]</code> (e.g. <code>[3]</code>); return <code>`${s}/${t}`</code> for an x-of-total style (<code>total</code> is the whole list for the in-input counter, the group’s member count for a header).' },
+			{ name: 'getSelectedOrderCallback', type: '(item) => string | number', since: 'v2.2.0', description: 'Sort key for the selected-items display when <code>selected-order="member"</code> (overrides <code>selected-order-member</code>).' },
+			{ name: 'selectedOrderCompareCallback', type: '(a, b) => number', since: 'v2.2.0', description: 'Comparator for the selected-items display when <code>selected-order="custom"</code> — standard <code>(a,b)=>number</code> contract.' },
+			{ name: 'keydownCallback', type: '(ctx) => boolean | void', since: 'v2.0.0', description: 'Intercept keydown before built-in handling; return true to suppress. <code>ctx.controller</code> exposes focus/select helpers (a <code>MultiSelectKeyboardController</code>).' }
 		]
 	},
 	{
@@ -345,7 +357,8 @@ export const cssVarGroups: ApiGroup[] = [
 			{ name: '--ms-option-bg-selected', type: 'color', description: 'Selected option background.' },
 			{ name: '--ms-option-min-height', type: 'length', description: 'Minimum option row height.' },
 			{ name: '--ms-tree-indent', type: 'length', since: 'v2.0.0', description: 'Indent step per tree level.' },
-			{ name: '--ms-tree-base-indent', type: 'length', since: 'v2.0.0', description: 'Indent of the first tree level.' }
+			{ name: '--ms-tree-base-indent', type: 'length', since: 'v2.0.0', description: 'Indent of the first tree level.' },
+			{ name: '--ms-group-label-*', type: 'various', description: 'Group header styling — <code>--ms-group-label-color</code>, <code>-font-size</code>, <code>-font-weight</code>, <code>-padding</code>, <code>-transform</code>, <code>-letter-spacing</code>. <strong>v2.2.0:</strong> the per-group selected-count chip reuses the in-input counter’s <code>--ms-counter-*</code> variables and inherits the group-label font-size, so theming the counter themes both and the chip scales with the header (incl. the phone fullscreen overlay).' }
 		]
 	},
 	{
@@ -389,6 +402,10 @@ export interface MigrationItem {
 }
 
 export const breakingChanges: MigrationItem[] = [
+	{
+		title: 'Tree checkbox-mode now defaults to cascade (v2.2.0)',
+		body: 'In a multi-select <strong>tree</strong>, <code>checkbox-mode</code> now defaults to <code>cascade</code> (was <code>independent</code>): checking a branch selects its whole subtree, branches render tristate, and the emitted selection follows <code>cascade-select-policy</code> (default <code>rolled-up</code> — a fully-selected subtree collapses to its root value). <strong>Behavior change for existing tree consumers</strong> — set <code>checkbox-mode="independent"</code> explicitly to keep per-node toggling. No effect on flat lists or single-select (cascade only activates in tree + multiple). Everything else in 2.2.0 is additive.'
+	},
 	{
 		title: 'Event handler properties now receive a CustomEvent',
 		body: '<code>onSelect</code>/<code>onDeselect</code>/<code>onChange</code> used to receive the bare option. They now receive a <code>CustomEvent&lt;MultiSelectEventDetail&gt;</code>. Read <code>e.detail.option</code>, <code>e.detail.selectedOptions</code>, <code>e.detail.selectedValues</code>. The native <code>addEventListener(\'select\', …)</code> path is unchanged.'

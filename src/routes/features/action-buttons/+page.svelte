@@ -119,6 +119,59 @@ el.actionButtons = [
     onClick: (ms) => ms.clearAll()
   }
 ];`;
+
+	// --- Demo 3: the standardized action context (v2.2.0) --------------------
+	const contextSetup = (el: any) => {
+		el.options = technologies;
+		el.actionButtons = [
+			{
+				action: 'custom',
+				getTextCallback: (_ms: any, ctx: any) => `Selected ${ctx.selectedCount} / ${ctx.optionCount}`,
+				getIsDisabledCallback: (_ms: any, ctx: any) => ctx.selectedCount === 0,
+				onClick: (_ms: any, ctx: any) =>
+					ctx.controller.showMessage(`${ctx.selectedCount} selected`, { variant: 'info' })
+			},
+			{
+				action: 'custom',
+				text: 'Invert',
+				onClick: (_ms: any, ctx: any) => {
+					const chosen = new Set(ctx.selectedValues.map(String));
+					ctx.controller.setSelected(
+						ctx.options.filter((o: any) => !chosen.has(String(o.value))).map((o: any) => o.value),
+						{ notify: true }
+					);
+				}
+			}
+		];
+	};
+
+	const contextCode = `// v2.2.0: every action-button callback gets a typed ActionContext as its
+// additive 2nd argument — a snapshot of live state plus a controller facade.
+// (The 1st arg is still the picker instance, so old (ms) => … code keeps working.)
+el.actionButtons = [
+  {
+    action: 'custom',
+    getTextCallback: (ms, ctx) => \`Selected \${ctx.selectedCount} / \${ctx.optionCount}\`,
+    getIsDisabledCallback: (ms, ctx) => ctx.selectedCount === 0,
+    // ctx.controller mirrors the element API — no reaching into internals.
+    onClick: (ms, ctx) => ctx.controller.showMessage(\`\${ctx.selectedCount} selected\`, { variant: 'info' })
+  },
+  {
+    action: 'custom',
+    text: 'Invert',
+    onClick: (ms, ctx) => {
+      const chosen = new Set(ctx.selectedValues.map(String));
+      ctx.controller.setSelected(
+        ctx.options.filter((o) => !chosen.has(String(o.value))).map((o) => o.value),
+        { notify: true }
+      );
+    }
+  }
+];
+
+// ActionContext also carries: selectedOptions, options, searchTerm, isOpen,
+// button, element, and the presentation fields (isFullscreen / isModal) —
+// so a button can adapt to the phone overlay, consistent with the render callbacks.`;
 </script>
 
 <DocLayout
@@ -192,5 +245,46 @@ el.actionButtons = [
 		</DemoPlayground>
 
 		<CodeBlock codeContent={dynamicCode} languageType="javascript" titleText="Dynamic actionButtons" />
+
+		<hr class="my-4" />
+
+		<DemoPlayground
+			code="AB03"
+			titleText="The standardized action context (v2.2.0)"
+			subtitleText="Callbacks now get a typed ActionContext — live state + a controller facade — as their 2nd argument."
+			{baseAttrs}
+			setup={contextSetup}
+			demoNote="Open the dropdown and select items: the first button’s label tracks selectedCount / optionCount and its click toasts via ctx.controller; “Invert” flips the selection using ctx.options + ctx.selectedValues."
+			idText="action-context"
+		>
+			{#snippet description()}
+				<ul class="mb-0">
+					<li>
+						<strong>v2.2.0</strong> hands every action-button callback a typed
+						<code>ActionContext&lt;T&gt;</code> as an <strong>additive 2nd argument</strong> —
+						<code>onClick</code>, <code>getTextCallback</code>, <code>getIsVisibleCallback</code>,
+						<code>getIsDisabledCallback</code>, <code>getClassCallback</code> and
+						<code>getTooltipCallback</code>. Existing one-argument <code>(ms) =&gt; …</code> code is
+						unaffected.
+					</li>
+					<li>
+						It's a snapshot of live state — <code>selectedCount</code>, <code>optionCount</code>,
+						<code>selectedValues</code>, <code>selectedOptions</code>, <code>options</code>,
+						<code>searchTerm</code>, <code>isOpen</code> — plus <code>ctx.controller</code>, a
+						<code>MultiSelectController</code> facade that mirrors the element API
+						(<code>setSelected</code>, <code>showMessage</code>, <code>open</code>/<code>close</code>,
+						<code>search</code>, …).
+					</li>
+					<li>
+						It extends <code>PresentationContext</code>, so a button can branch on
+						<code>ctx.isFullscreen</code> / <code>ctx.isModal</code> — the same contract the render
+						callbacks use. <code>ActionContext</code> and <code>MultiSelectController</code> are exported
+						from the package entry.
+					</li>
+				</ul>
+			{/snippet}
+		</DemoPlayground>
+
+		<CodeBlock codeContent={contextCode} languageType="javascript" titleText="Reading the ActionContext" />
 	</div>
 </DocLayout>

@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed — v2.2.0 (standardized callback context + cascade/grouping/ordering)
+- **Updated `@keenmate/web-multiselect` to `^2.2.0`** (from `^2.1.0`). The navbar version badge auto-derives from the installed package, so it now reads `v2.2.0`.
+- **API source of truth (`src/lib/demo/api-data.ts`) brought up to 2.2.0**, flowing through to `/api/properties`, `/api/callbacks`, `/api/css-variables` and `/api/migration`:
+  - New attributes — `group-select-mode` (*Selection & behavior*), `selected-order` + `selected-order-member` (*Display of selected items*), and a new *Styling* group for the `custom-styles` attribute; `checkbox-mode` re-documented with its new `cascade` default.
+  - New callbacks — `getCountLabelCallback`, `getSelectedOrderCallback`, `selectedOrderCompareCallback`; the *Rendering* group now records that **every** render callback (incl. `renderSelectedItemContentCallback` / `renderSelectedContentCallback` / `renderGroupLabelContentCallback`) and the display `get*` siblings receive the presentation/render context as an additive 2nd argument.
+  - CSS — a `--ms-group-label-*` row noting the per-group count chip reuses `--ms-counter-*` and scales with the header.
+  - Migration — a new top entry: **tree `checkbox-mode` now defaults to `cascade`** (behavior change for existing tree consumers).
+- **New / updated interactive demos** for the headline changes:
+  - `BU03 · Grouped list — select-all per group & counts` on `/features/basic`: `group-select-mode="cascade"` tristate group headers, per-group counts via `getCountLabelCallback`, and a live `selected-order` control.
+  - `CR03 · Declarative styling — custom-styles` on `/features/custom-rendering`: a no-JavaScript demo injecting raw CSS via the `custom-styles` attribute (pill badges + tinted option hover).
+  - `AB03 · The standardized action context` on `/features/action-buttons`: action-button callbacks reading the typed `ActionContext` (`selectedCount` / `optionCount` / `ctx.controller` / `selectedValues`) 2nd argument, with a copy-pasteable snippet.
+  - `TR01` (tree) reworked so `checkbox-mode` defaults to `cascade`, matching the new library default.
+
 ### Changed — v2.1.0 (library `defer` / `ready()` render gate)
 - **Updated `@keenmate/web-multiselect` to `^2.1.0`** (from `^2.0.0`). The navbar version badge auto-derives from the installed package, so it now reads `v2.1.0`.
 - **Documented the new `defer` render gate** in the API source of truth (`src/lib/demo/api-data.ts`), so it flows through to the `/api/properties`, `/api/events` and `/api/methods` pages: the `defer` attribute (new *Lifecycle* group), the `ready` event, and the `ready()` method + `isReady` getter (in *Messaging & lifecycle*), all tagged `since: v2.1.0`.

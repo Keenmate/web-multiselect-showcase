@@ -20,11 +20,12 @@
 			label: 'Checkbox mode',
 			type: 'select',
 			attr: 'checkbox-mode',
-			default: 'independent',
+			default: 'cascade',
 			options: [
-				{ value: 'independent', label: 'independent' },
-				{ value: 'cascade', label: 'cascade' }
-			]
+				{ value: 'cascade', label: 'cascade — check a branch, select its subtree (default)' },
+				{ value: 'independent', label: 'independent — toggle each node on its own' }
+			],
+			hint: 'v2.2.0: cascade is now the default for multi-select trees.'
 		},
 		{
 			key: 'cascadeSelectPolicy',
@@ -125,7 +126,7 @@ el.getIsSelectableCallback = (node) => !node.hasChildren;`;
 		>
 			{#snippet description()}
 				<ul class="mb-0">
-					<li><code>checkbox-mode="cascade"</code> makes checking a node select its whole subtree (a partial branch shows a tristate dash).</li>
+					<li><strong>v2.2.0:</strong> <code>checkbox-mode</code> now <strong>defaults to <code>cascade</code></strong> for multi-select trees — checking a node selects its whole subtree and a partial branch shows a tristate dash. Switch to <code>independent</code> for per-node toggling (the pre-2.2 behaviour). See the <a href="/api/migration">migration notes</a>.</li>
 					<li><code>cascade-select-policy</code> controls which values are emitted — <code>rolled-up</code> collapses a full subtree to its root, <code>leaves</code> emits only leaf nodes, <code>all</code> emits every checked node.</li>
 					<li><code>full-title-member</code> gives each badge a breadcrumb (<em>Fruit / Pome / Apple</em>) when <code>show-badge-full-title</code> is on — disambiguating leaves that share a name.</li>
 				</ul>
