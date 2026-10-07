@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed — v2.3.0 (checkbox scale wired to `--base-checkbox-scale`)
+- **Updated `@keenmate/web-multiselect` to `^2.3.0`** (from `^2.2.0`; the installed tree was still `2.1.0`). The navbar version badge auto-derives from the installed package, so it now reads `v2.3.0`.
+- **Documented the new `--ms-checkbox-scale` variable** in the API source of truth (`src/lib/demo/api-data.ts`, *Scaling & typography* group), flowing through to `/features/theming` and `/api/css-variables`: it defaults to `var(--base-checkbox-scale, 1)` so one theme-layer knob sizes checkboxes across every Keenmate component, and scales the box, border width (`--ms-checkbox-border-width-scaled`) and radius together via `calc` (not a `transform`) so the masked check/dash stays crisp. Tagged `since: v2.3.0`.
+- **Live theming demo (`TH01`) gained a `--ms-checkbox-scale` slider** (0.8–2×). The demo picker is now `multiple` with `show-checkboxes`, so dragging the knob visibly rescales the dropdown checkboxes and the applied-CSS snippet mirrors the value.
+
 ### Changed — v2.2.0 (standardized callback context + cascade/grouping/ordering)
 - **Updated `@keenmate/web-multiselect` to `^2.2.0`** (from `^2.1.0`). The navbar version badge auto-derives from the installed package, so it now reads `v2.2.0`.
 - **API source of truth (`src/lib/demo/api-data.ts`) brought up to 2.2.0**, flowing through to `/api/properties`, `/api/callbacks`, `/api/css-variables` and `/api/migration`:

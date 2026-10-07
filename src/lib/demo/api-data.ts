@@ -321,7 +321,8 @@ export const cssVarGroups: ApiGroup[] = [
 		rows: [
 			{ name: '--ms-rem', type: 'length', default: 'var(--base-rem, 10px)', description: 'Global sizing unit. Font sizes are unitless multipliers of this.' },
 			{ name: '--ms-font-family', type: 'font', description: 'Component font family (inherits <code>--base-font-family</code>).' },
-			{ name: '--ms-input-font-size', type: 'multiplier', description: 'Input font size (× <code>--ms-rem</code>).' }
+			{ name: '--ms-input-font-size', type: 'multiplier', description: 'Input font size (× <code>--ms-rem</code>).' },
+			{ name: '--ms-checkbox-scale', type: 'number', default: 'var(--base-checkbox-scale, 1)', since: 'v2.3.0', description: 'Scales the option checkbox independently of <code>--ms-rem</code>. Bridges to <code>--base-checkbox-scale</code>, so one theme-layer knob sizes checkboxes across every Keenmate component. The box width/height, border width (<code>--ms-checkbox-border-width-scaled</code>) and corner radius all scale together via <code>calc</code> — not a <code>transform</code> — so the masked check/dash stays crisp and centred at any scale.' }
 		]
 	},
 	{

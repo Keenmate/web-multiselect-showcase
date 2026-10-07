@@ -12,6 +12,7 @@
 	let rem = $state(10);
 	let accent = $state('#6366f1');
 	let radius = $state(6);
+	let checkboxScale = $state(1);
 
 	// One style string, applied to the <web-multiselect> element directly.
 	let styleVars = $derived(
@@ -20,7 +21,8 @@
 			` --ms-input-border: 1px solid ${accent};` +
 			` --ms-option-bg-selected: ${accent}22;` +
 			` --ms-option-bg-hover: ${accent}18;` +
-			` --ms-input-border-radius: ${radius}px`
+			` --ms-input-border-radius: ${radius}px;` +
+			` --ms-checkbox-scale: ${checkboxScale}`
 	);
 
 	$effect(() => {
@@ -36,6 +38,7 @@
 			`  --ms-option-bg-selected: ${accent}22;\n` +
 			`  --ms-option-bg-hover: ${accent}18;\n` +
 			`  --ms-input-border-radius: ${radius}px;\n` +
+			`  --ms-checkbox-scale: ${checkboxScale};\n` +
 			`}`
 	);
 
@@ -89,6 +92,8 @@
 					<div class="multiselect-demo">
 						<web-multiselect
 							bind:this={elRef}
+							multiple
+							show-checkboxes="true"
 							value-member="value"
 							display-value-member="label"
 							icon-member="icon"
@@ -96,7 +101,8 @@
 							search-placeholder="Search technologies…"
 						></web-multiselect>
 						<p class="text-muted small mt-2 mb-0">
-							Open the dropdown to see the accent carry into hover and selected rows.
+							Open the dropdown to see the accent carry into hover, selected rows and the
+							checkboxes.
 						</p>
 					</div>
 				</div>
@@ -133,7 +139,7 @@
 							/>
 						</div>
 
-						<div class="mb-0">
+						<div class="mb-3">
 							<label for="radius-range" class="form-label small mb-1">
 								<code>--ms-input-border-radius</code>: {radius}px
 							</label>
@@ -146,6 +152,25 @@
 								step="1"
 								bind:value={radius}
 							/>
+						</div>
+
+						<div class="mb-0">
+							<label for="checkbox-scale-range" class="form-label small mb-1">
+								<code>--ms-checkbox-scale</code>: {checkboxScale}×
+							</label>
+							<input
+								id="checkbox-scale-range"
+								type="range"
+								class="form-range"
+								min="0.8"
+								max="2"
+								step="0.1"
+								bind:value={checkboxScale}
+							/>
+							<div class="form-text">
+								Open the dropdown — the checkbox box, border and radius scale together.
+								Reads <code>--base-checkbox-scale</code> when set on a theme layer.
+							</div>
 						</div>
 					</div>
 				</div>
